@@ -47,8 +47,17 @@
     <body data-spy="scroll" data-target="#navbar" data-offset="0">
         <?php
         $language = Yii::app()->request->cookies['language']->value;
-        $languagesArray = array('hy' => 1, 'en' => 2, 'ru' => 3);
+        $languagesArray = array('hy' => 1, 'ru' => 2, 'en' => 3);
         $languageNumber = $languagesArray[$language];
+        $getTranslateWorld = array();
+        $translate = Translate::model()->findAll();
+
+        if (!empty($translate)) {
+            foreach ($translate as $key => $value) {
+                if ($value->language == $language)
+                    $getTranslateWorld[$value->word_key] = $value->word_value;
+            }
+        }
         ?>
         <header id="header" role="banner">
             <div class="container">
@@ -70,13 +79,13 @@
                         </div>
                         <ul class="nav navbar-nav">
                             <li class="active"><a href="#main-slider"><i class="icon-home"></i></a></li>
-                            <li><a href="#about-us"><?php echo Translate::model()->getTranslateWorld('about_us', $language); ?></a></li>
-                            <li><a href="#tours"><?php echo Translate::model()->getTranslateWorld('tours', $language); ?></a></li>
-                            <li><a href="#services"><?php echo Translate::model()->getTranslateWorld('services', $language); ?></a></li>
-                            <li><a href="#about-armenia"><?php echo Translate::model()->getTranslateWorld('about_armenia', $language); ?></a></li>
-                            <li><a href="#gallery"><?php echo Translate::model()->getTranslateWorld('gallery', $language); ?></a></li>
-                            <li><a href="#monuments"><?php echo Translate::model()->getTranslateWorld('monuments', $language); ?></a></li>
-                            <li><a href="#contact"><?php echo Translate::model()->getTranslateWorld('contact', $language); ?></a></li>
+                            <li><a href="#about-us"><?php echo $getTranslateWorld['about_us']; ?></a></li>
+                            <li><a href="#tours"><?php echo $getTranslateWorld['tours']; ?></a></li>
+                            <li><a href="#services"><?php echo $getTranslateWorld['services']; ?></a></li>
+                            <li><a href="#about-armenia"><?php echo $getTranslateWorld['about_armenia']; ?></a></li>
+                            <li><a href="#gallery"><?php echo $getTranslateWorld['gallery']; ?></a></li>
+                            <li><a href="#monuments"><?php echo $getTranslateWorld['monuments']; ?></a></li>
+                            <li><a href="#contact"><?php echo $getTranslateWorld['contact']; ?></a></li>
                         </ul>
                     </div>
                 </div>
@@ -90,7 +99,7 @@
                 if (!empty($news)) {
                     foreach ($news as $key => $value) {
                         ?>
-                        <div class="item <?=($key == 0)?'active':'';?>">
+                        <div class="item <?= ($key == 0) ? 'active' : ''; ?>">
                             <div class="container">
                                 <div class="carousel-content">
 
@@ -111,7 +120,7 @@
             <div class="container">
                 <div class="box">
                     <div class="center">
-                       <!-- <h2><?php echo Translate::model()->getTranslateWorld('about_us', $language); ?></h2> -->
+                       <!-- <h2><?php echo $getTranslateWorld['about_us']; ?></h2> -->
                         <p class="lead"></p>
                     </div>
                 </div><!--/.box-->
@@ -120,21 +129,21 @@
         <section id="tours">
             <div class="container">
                 <div class="box">
-                   <!-- <h1><?php echo Translate::model()->getTranslateWorld('tours', $language); ?></h1> -->
+                   <!-- <h1><?php echo $getTranslateWorld['tours']; ?></h1> -->
                 </div>
             </div>
         </section>
         <section id="services">
             <div class="container">
                 <div class="box first">
-                   <!-- <h1><?php echo Translate::model()->getTranslateWorld('services', $language); ?></h1> -->
+                   <!-- <h1><?php echo $getTranslateWorld['services']; ?></h1> -->
                 </div><!--/.box-->
             </div><!--/.container-->
         </section><!--/#services-->
         <section id="about-armenia">
             <div class="container">
                 <div class="box">
-                    <h1><?php echo Translate::model()->getTranslateWorld('about_armenia', $language); ?></h1>
+                    <h1><?php echo $getTranslateWorld['about_armenia']; ?></h1>
                     <div class="row">
                         <?php
                         $regions = Regions::model()->findAllByAttributes(array('language' => $language));
@@ -159,7 +168,7 @@
         <section id="gallery">
             <div class="container">
                 <div class="box">
-                    <h1><?php echo Translate::model()->getTranslateWorld('gallery', $language); ?></h1>
+                    <h1><?php echo $getTranslateWorld['gallery']; ?></h1>
                     <div id="slider_container" style="position:relative;margin:0 auto;top:0px;left:0px;width:800px;height:456px;background:#191919;">
                         <div u="loading" style="position:absolute;top:0px;left:0px;">
                             <div style="filter:alpha(opacity=70);opacity:0.7;position:absolute;display:block;background-color:#000000;top:0px;left:0px;width:100%;height:100%;">
@@ -206,10 +215,9 @@
         <section id="monuments">
             <div class="container">
                 <div class="box">
-                    <h1><?php echo Translate::model()->getTranslateWorld('monuments', $language); ?></h1>
+                    <h1><?php echo $getTranslateWorld['monuments']; ?></h1>
                     <div class="row">
                         <?php
-                        echo $languageNumber;
                         $monuments = PlacesOfInterest::model()->findAllByAttributes(array('language' => $languageNumber));
                         if (!empty($monuments)) {
                             foreach ($monuments as $key => $value) {
@@ -236,53 +244,53 @@
                 <div class="box last">
                     <div class="row">
                         <div class="col-sm-6">
-                            <h1><?php echo Translate::model()->getTranslateWorld('contact_form', $language); ?></h1>
+                            <h1><?php echo $getTranslateWorld['contact_form']; ?></h1>
                             <p></p>
                             <div class="status alert alert-success" style="display: none"></div>
                             <form class="contact-form" name="ContactForm" method="post" action="/site/contact" role="form">
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <input type="text" name="ContactForm[name]" class="form-control" required="required" placeholder="<?php echo Translate::model()->getTranslateWorld('name', $language); ?>">
+                                            <input type="text" name="ContactForm[name]" class="form-control" required="required" placeholder="<?php echo $getTranslateWorld['name']; ?>">
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <input type="text" name="ContactForm[email]" class="form-control" required="required" placeholder="<?php echo Translate::model()->getTranslateWorld('email_address', $language); ?>">
+                                            <input type="text" name="ContactForm[email]" class="form-control" required="required" placeholder="<?php echo $getTranslateWorld['email_address']; ?>">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            <input type="text" name="ContactForm[subject]" required="required" class="form-control" rows="8" placeholder="<?php echo Translate::model()->getTranslateWorld('subject', $language); ?>">
+                                            <input type="text" name="ContactForm[subject]" required="required" class="form-control" rows="8" placeholder="<?php echo $getTranslateWorld['subject']; ?>">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            <textarea name="ContactForm[body]" id="message" required="required" class="form-control" rows="8" placeholder="<?php echo Translate::model()->getTranslateWorld('message', $language); ?>"></textarea>
+                                            <textarea name="ContactForm[body]" id="message" required="required" class="form-control" rows="8" placeholder="<?php echo $getTranslateWorld['message']; ?>"></textarea>
                                         </div>
                                         <div class="form-group">
-                                            <button type="submit" class="btn btn-danger btn-lg" name="send-message"><?php echo Translate::model()->getTranslateWorld('send_message', $language); ?></button>
+                                            <button type="submit" class="btn btn-danger btn-lg" name="send-message"><?php echo $getTranslateWorld['send_message']; ?></button>
                                         </div>
                                     </div>
                                 </div>
                             </form>
                         </div><!--/.col-sm-6-->
                         <div class="col-sm-6">
-                            <h1><?php echo Translate::model()->getTranslateWorld('our_address', $language); ?></h1>
+                            <h1><?php echo $getTranslateWorld['our_address']; ?></h1>
                             <div class="row">
                                 <div class="col-md-6">
                                     <address>
-                                        <strong><?php echo Translate::model()->getTranslateWorld('city_address', $language); ?></strong><br>
-                                        <?php echo Translate::model()->getTranslateWorld('office_address', $language); ?><br>
-                                        <abbr title="Phone"><?php echo Translate::model()->getTranslateWorld('phone', $language); ?>:</abbr> (+374 95) 12-77-00
+                                        <strong><?php echo $getTranslateWorld['city_address']; ?></strong><br>
+                                        <?php echo $getTranslateWorld['office_address']; ?><br>
+                                        <abbr title="Phone"><?php echo $getTranslateWorld['phone']; ?>:</abbr> (+374 95) 12-77-00
                                     </address>
                                 </div>
                             </div>
-                            <h1><?php echo Translate::model()->getTranslateWorld('connect_with_us', $language); ?></h1>
+                            <h1><?php echo $getTranslateWorld['connect_with_us']; ?></h1>
                             <div class="row">
                                 <div class="col-md-6">
                                     <ul class="social">
@@ -309,7 +317,7 @@
                 <div class="row">
                     <div class="col-sm-10">
                         <?php echo Yii::app()->params->copyrightInfo; ?>
-                        <?php echo Translate::model()->getTranslateWorld('all_rights_reserved', $language); ?>.
+                        <?php echo $getTranslateWorld['all_rights_reserved']; ?>.
                     </div>
                 </div>
             </div>
